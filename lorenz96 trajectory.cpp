@@ -12,14 +12,12 @@ MatrixXd fun_gen_noise(int nrolls, int dim, MatrixXd Mu, MatrixXd Sigma, char a)
 
 random_device rd;
 uniform_real_distribution<double> runif_03(-1,1); 
-//uniform_real_distribution<double> runif_03(-2, 2);
 
 int main()
 {
 	double F;
 	int M;
 
-	
 	cout << "Input F:" << endl;
 	cin >> F;
 
@@ -30,13 +28,10 @@ int main()
 
 	VectorXd x_start(M);
 
-	//double x0 = runif_03(rd);
 	for (int i = 0; i < M; i++)
 	{
 		x_start(i) = runif_03(rd);
-	}
-	//x_start(M - 1) += 0.008;
-	
+	}	
 
 	cout << "x_start" << endl;
 	cout << x_start << endl;
@@ -57,7 +52,6 @@ int main()
 	VectorXd X_new(M);
 	VectorXd m1, m2, m3, m4, m;
 
-
 	//input distribution
 	MatrixXd Mu_input(M, 1);
 	MatrixXd Sigma_input_x(M, M);
@@ -69,8 +63,6 @@ int main()
 	}
 
 	double sigma_x = 0.5;
-	//cout << "Insert sigma_x please:" << endl;
-	//cin >> sigma_x;
 
 	for (int jj = 0; jj < M; jj++)
 	{
@@ -85,9 +77,7 @@ int main()
 		}
 	}
 
-	//cout << "Independent (y/n)?" << endl;
 	char a_input;
-	//cin >> a_input;
 	a_input = 'y';
 
 	while (t<(tn-delta_t))
@@ -97,7 +87,6 @@ int main()
 		m3 = fun_lor96(X + m2*delta_t / 2.0, M, F);
 		m4 = fun_lor96(X + m3*delta_t, M, F);
 		m = (m1 + 2 * m2 + 2 * m3 + m4) / 6;
-		//m = m1;
 		X_new = X + m*delta_t + fun_gen_noise(1, M, Mu_input, Sigma_input_x, a_input).row(0).transpose();
 		X = X_new;
 		t = t + delta_t;
@@ -106,12 +95,6 @@ int main()
 	}
 
 	cout << xx << endl;
-	
-	
-
-	//double sigma_y = 1.0;
-	//cout << "Insert sigma_y please:" << endl;
-	//cin >> sigma_y;
 
 	for (int jj = 0; jj < M; jj++)
 	{
@@ -126,39 +109,23 @@ int main()
 		}
 	}
 
-
-	
 	cout << "sigmas" << endl;
-	//cout << sigma_x << endl;
-	//cout << Sigma_input_x << endl;
-	//cout << sigma_y << endl;
-	//cout << Sigma_input_y << endl;
 
 	//adding noise 
-	//MatrixXd trajectory_x = xx + fun_gen_noise(rows, M, Mu_input, Sigma_input_x, a_input);
 	MatrixXd trajectory_x = xx;
 	MatrixXd trajectory_y = trajectory_x + fun_gen_noise(rows, M, Mu_input, Sigma_input_y, a_input);
-
-	//cout << trajectory_x << endl;
 
 	ofstream fout("trajectory_y96_11.txt");
 	fout << trajectory_y << endl;
 	fout << endl;
 	fout.close();
-
-	//ofstream f2out("deterministic16.txt");
-	//f2out << xx << endl;
-	//f2out << endl;
-	//f2out.close();
-
+	
 	ofstream f3out("trajectory_x96_11.txt");
 	f3out << trajectory_x << endl;
 	f3out << endl;
 	f3out.close();
 
-
 	system("pause");
 	
 	return 0;
 }
-
